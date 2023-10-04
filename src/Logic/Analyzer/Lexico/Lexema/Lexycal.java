@@ -28,7 +28,6 @@ public class Lexycal {
     public int commentaryRecognize(String to_analize){
       int position;
       position = this.getPosition(finder.find(to_analize, "[/][*]"));
-      System.out.println(position);
        if(position != -1){ // si se encontro, entra al condicional
            this.lastPosition = position;
            position = this.getPosition(finder.find(to_analize, "[*][/]")); // revisa el final del comentario
@@ -66,11 +65,12 @@ public class Lexycal {
                 return this.finder.retrieveLexema(null);   
             }
             index += position; /// *** podria moverlo abajo ***
-            position = this.getPosition(finder.find(to_analize, "[^\\s]",index));
-            if(position != -1){
-                index += position;
+            position = this.getPosition(finder.find(to_analize, "[^\\s]",position));
+            if(position > -1){ //quita espacios en blanco, despues del comentario
+                to_analize = to_analize.substring(position);
+            }else{ // lo deja igual
+                to_analize = to_analize.substring(index);
             }
-            to_analize = to_analize.substring(index);
        }
        System.out.println(to_analize);
 
