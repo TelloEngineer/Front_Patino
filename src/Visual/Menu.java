@@ -6,7 +6,6 @@ import javax.swing.table.DefaultTableModel;
 
 import Logic.Analyzer.Lexico.GrammarV1_0;
 import Logic.Analyzer.Lexico.Token.Token;
-import Logic.Analyzer.Sintactico.SintacAnaliz;
 import Logic.Analyzer.Sintactico.Syntatic;
 import Logic.Behavior.Analyzer;
 import Logic.Behavior.Grammar;
@@ -18,9 +17,6 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Menu extends JFrame implements ActionListener {

@@ -17,7 +17,6 @@ public class GrammarV1_0 implements Grammar, GetLexycal{
     private LexycalComponents tokenAnalizer;
     private String stateGrammar;
     private boolean isSucessfully;
-    private int start;
     private int last;
     public GrammarV1_0(){
         Map<String,TokenId> tokenIdList = new LinkedHashMap<String,TokenId>(){{
@@ -73,7 +72,6 @@ public class GrammarV1_0 implements Grammar, GetLexycal{
         this.last += lastPosition;
         int start = this.last - token.getLexema().getEnd();
         token.getLexema().setEnd(this.last);
-        this.start += start;
         token.getLexema().setStart(start);
         return token;
     }
