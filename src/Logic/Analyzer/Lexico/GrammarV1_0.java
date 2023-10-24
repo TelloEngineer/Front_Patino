@@ -4,6 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import Logic.Analyzer.Lexico.Token.LexycalComponents;
 import Logic.Analyzer.Lexico.Token.Token;
 import Logic.Analyzer.Lexico.Token.TokenId;
@@ -47,7 +49,7 @@ public class GrammarV1_0 implements Grammar, GetLexycal{
             put("float",new TokenId(2,"palabra reservada float"));
             put("void",new TokenId(0,"palabra reservada void"));
             put("main",new TokenId(3, "palabra reservada main"));
-            put("[a-zA-Z][a-zA-Z0-9]*",new TokenId('i',"identificador"));   
+            put("[a-zA-Z][a-zA-Z0-9]*",new TokenId('i',"identificador"));
         }}; 
         tokenAnalizer = new LexycalComponents(tokenIdList);
     }
@@ -83,7 +85,8 @@ public class GrammarV1_0 implements Grammar, GetLexycal{
         if(tokenFound.equals(new Token())){
             this.stateGrammar = this.tokenAnalizer.getErrorMessage() + ", ultimo lugar leido: " + this.last;
             activateState(this.tokenAnalizer);
-            System.out.println(this.stateGrammar);
+            //System.out.println(this.stateGrammar);
+            showErrorDialog();
             return true;
         }
         inString = cutString(this.tokenAnalizer, inString);
@@ -115,4 +118,10 @@ public class GrammarV1_0 implements Grammar, GetLexycal{
         return this.stateGrammar; // devuelve si fue exitoso, o no.
     }
     
+    public void showErrorDialog() {
+        String errorMessage = this.stateGrammar;
+        if(!this.isSucessfully){
+            JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

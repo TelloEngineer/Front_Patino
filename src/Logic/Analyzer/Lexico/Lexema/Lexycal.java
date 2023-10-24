@@ -6,6 +6,8 @@ package Logic.Analyzer.Lexico.Lexema;
 
 import java.util.regex.Matcher;
 
+import javax.swing.JOptionPane;
+
 import lombok.Getter;
 
 /**
@@ -72,7 +74,7 @@ public class Lexycal {
                 to_analize = to_analize.substring(index);
             }
        }
-       System.out.println(to_analize);
+       //System.out.println(to_analize);
 
        //devuelve el lexema encontrado
        Lexema lexema = this.finder.retrieveLexema(this.finder.findNext_to(to_analize, regex));
@@ -103,5 +105,10 @@ public class Lexycal {
             default:
                return "no se reconoce el codigo";
         }
+    }
+
+    public void showErrorDialog() {
+        String errorMessage = errorMessage();
+        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
