@@ -1,4 +1,5 @@
 package Logic.Analyzer.Sintactico;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
@@ -8,11 +9,15 @@ public class ejemplo_sintactico {
     private List<Token> tokens;
     private int index;
     private String stateMessage;
+    private Exp arbol_Sintactico;
 
     public String getStateMessage() {
-        return stateMessage;
+        return this.stateMessage;
     }
 
+    public Exp getArbol_Sintactico(){
+        return this.arbol_Sintactico;
+    }
 
     private void coincidir(int token) {
         System.out.println("coincidir");
@@ -32,84 +37,108 @@ public class ejemplo_sintactico {
     }
 
 
-    private void factor() {
+    private Exp factor() {
+        Exp factorExp;
         System.out.println("factor");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case '(': // "("
                 coincidir('('); // numero de "("
-                expr();
+                factorExp = expr();
                 coincidir(')'); // numero de ")"
-                break;
+            break;
             default:
-                digito();
+               factorExp = digito();
         }
         System.out.println("factor fin");
+        return factorExp;
     }
 
-    private void digito() {
+    private Exp digito() {
+        Exp digitoExp;
         System.out.println("digito");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 'e': // numero de "entero"
                 coincidir('e'); // numero de "entero"
-                break;
+                digitoExp = new NumExp("e", token.getLexema().getSubString());
+            break;
             case 'f': //numero de "real"
                 coincidir('f'); // numero de "real"
-                break;
+                digitoExp = new NumExp("f", token.getLexema().getSubString());
+            break;
             default:
                 coincidir('i'); // numero de "identificador"
-        }
+                digitoExp = new NumExp("i", token.getLexema().getSubString());
+            }
+        System.out.println("digito fin");
+        return digitoExp;
     }
     
-    private void divMul() {
+    private Exp divMul(Exp divMulHer) {
+        Exp factorExp, divMulExp, resultExp;
         System.out.println("divMul");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case '*': /// cambiar numero "*"
                 this.coincidir('*');
-                factor();
-                divMul();
+                factorExp = factor();
+                divMulExp = divMul(new BinaryExp(token.getLexema().getSubString(), divMulHer,factorExp));
+                resultExp = divMulExp;
             break;
             case '/': /// cambiar numero "/"
                 this.coincidir('/'); 
-                factor();
-                divMul();
+                factorExp = factor();
+                divMulExp = divMul(new BinaryExp(token.getLexema().getSubString(), divMulHer,factorExp));
+                resultExp = divMulExp;
             break;
             default:
-            break;
+                resultExp = divMulHer;
         }
         System.out.println("divMul fin");
+        return resultExp;
     }
 
-    private void subAdd(){
+    private Exp subAdd(Exp subAddHer){
+        Exp termExp, subAddExp, resultExp;
         System.out.println("subAdd");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case '+': 
                 this.coincidir('+'); /// poner numero "+"
-                term();
-                subAdd();
+                termExp = term();
+                subAddExp = subAdd(new BinaryExp(token.getLexema().getSubString(), subAddHer, termExp));
+                resultExp = subAddExp;
             break;
             case '-':
                 this.coincidir('-'); /// poner numero "-"
-                term();
-                subAdd();
+                termExp = term();
+                subAddExp = subAdd(new BinaryExp(token.getLexema().getSubString(), subAddHer, termExp));
+                resultExp = subAddExp;
             break;
             default:
-            break;
+                resultExp = subAddHer;
         }
         System.out.println("subAdd fin");
+        return resultExp;
     }
 
-    private void term(){
+    private Exp term(){
+        Exp factorExp, divMulExp;
         System.out.println("term");
-        factor();
-        divMul();
+        factorExp = factor();
+        divMulExp = divMul(factorExp);
         System.out.println("term fin");
+        return divMulExp;
     }
 
-    private void expr(){
+    private Exp expr(){
+        Exp termExp, subAddExp;
         System.out.println("expr");
-        term();
-        subAdd();
+        termExp = term();
+        subAddExp = subAdd(termExp);
         System.out.println("expr fin");
+        return subAddExp;
     }
 
     
@@ -142,7 +171,10 @@ public class ejemplo_sintactico {
             }
             // Agregar una verificaciÃ³n para imprimir el tamaÃ±o de la lista
             System.out.println("TamaÃ±o de tokens en isValid: " + this.tokens.size());
-            expr();
+            this.arbol_Sintactico = expr();
+
+            System.out.println(this.arbol_Sintactico.toString());
+            
             if ( index < this.tokens.size() - 1){
                 this.stateMessage = "El token '" + tokens.get(index).getLexema().getSubString() + "' no es valido";
                 throw new CancellationException();

@@ -33,7 +33,8 @@ public class Syntatic {
 
     private void programa() {
         System.out.println("programa");
-        switch(this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 1:
                 coincidir(1);
                 coincidir(3);
@@ -54,7 +55,8 @@ public class Syntatic {
 
     private void declaraciones() {
         System.out.println("declaraciones");
-        switch(this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 1:
                 coincidir(1);
                 lista_variables();
@@ -76,7 +78,8 @@ public class Syntatic {
     private void lista_variables(){
         System.out.println("lista_variables");
         coincidir('i');
-        switch(this.tokens.get(index).getId().getId()){
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case ',':
                 coincidir(',');
                 lista_variables();
@@ -89,7 +92,8 @@ public class Syntatic {
     private void ordenes() {
      System.out.println("ordenes");
         orden();
-        switch(this.tokens.get(index).getId().getId()){
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 9:case 10:case 'i':
                 ordenes();
                 break;
@@ -100,7 +104,8 @@ public class Syntatic {
     }
     private void orden(){
         System.out.println("orden");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 9:
                condicion(); 
                 break;
@@ -127,7 +132,8 @@ public class Syntatic {
     
     private void expresion_arit() {
         System.out.println("expresion_arit");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case '(':
                 coincidir('(');
                 expresion_arit();
@@ -155,7 +161,8 @@ public class Syntatic {
 
     private void exp_arit(){
         System.out.println("exp_arit");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case '+':case '-':case '*':case '/': 
                 operador_arit();
                 expresion_arit();
@@ -168,7 +175,8 @@ public class Syntatic {
 
     private void operador_arit() {
         System.out.println("operador_arit");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case '+': // +
                 coincidir('+'); // +
                 break;
@@ -201,7 +209,8 @@ public class Syntatic {
     } 
     private void sig_condicion(){
         System.out.println("sig_condicion");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case '}': //cierra llave
                 coincidir('}'); //cierra llave
                 if(this.tokens.get(index).getId().getId() == 12){// else
@@ -227,7 +236,8 @@ public class Syntatic {
 
     private void operador(){
         System.out.println("operador");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 'e': // numero de "entero"
                 coincidir('e'); // numero de "entero"
                 break;
@@ -247,7 +257,8 @@ public class Syntatic {
     private void condicion_op() {
         /// usare if, y mi funcion isThere aqui
         System.out.println("condicion_op");
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 17: // =
                 coincidir(17); // =
                 break;
@@ -281,7 +292,8 @@ public class Syntatic {
     } 
 //----------------------------------------------------------------------------------------
 /* private void tipoDato() {
-        switch (this.tokens.get(index).getId().getId()) {
+        Token token = this.tokens.get(index);
+        switch (token.getId().getId()) {
             case 4: // Palabra reservada "int"
                 coincidir(4);
                 tipoDato();
