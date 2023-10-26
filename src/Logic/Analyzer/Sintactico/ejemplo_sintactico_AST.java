@@ -1,11 +1,11 @@
 package Logic.Analyzer.Sintactico;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
 import Logic.Analyzer.Lexico.Token.Token;
+import Logic.Analyzer.Semantico.Semantic;
 
-public class ejemplo_sintactico {
+public class ejemplo_sintactico_AST {
     private List<Token> tokens;
     private int index;
     private String stateMessage;
@@ -69,7 +69,7 @@ public class ejemplo_sintactico {
             break;
             default:
                 coincidir('i'); // numero de "identificador"
-                digitoExp = new NumExp("i", token.getLexema().getSubString());
+                digitoExp = new NumExp("e", token.getLexema().getSubString());
             }
         System.out.println("digito fin");
         return digitoExp;
@@ -172,17 +172,13 @@ public class ejemplo_sintactico {
             // Agregar una verificaciÃ³n para imprimir el tamaÃ±o de la lista
             System.out.println("TamaÃ±o de tokens en isValid: " + this.tokens.size());
             this.arbol_Sintactico = expr();
-
             System.out.println(this.arbol_Sintactico.toString());
-            
-            if ( index < this.tokens.size() - 1){
-                this.stateMessage = "El token '" + tokens.get(index).getLexema().getSubString() + "' no es valido";
-                throw new CancellationException();
-            }
+            System.out.println(new Semantic().semanticAnalize(this.arbol_Sintactico)); 
         } catch (CancellationException expected) {
             return false;
         }
         this.stateMessage = "Todo bien";
         return true;
     }
+    
 }

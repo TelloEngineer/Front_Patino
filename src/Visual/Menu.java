@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import Logic.Analyzer.Lexico.GrammarV1_0;
 import Logic.Analyzer.Lexico.Token.Token;
 import Logic.Analyzer.Sintactico.Syntatic;
-import Logic.Analyzer.Sintactico.ejemplo_sintactico;
+import Logic.Analyzer.Sintactico.ejemplo_sintactico_AST;
 import Logic.Behavior.Analyzer;
 import Logic.Behavior.Grammar;
 import Logic.Formats.StringAnalyzer;
@@ -289,7 +289,7 @@ public class Menu extends JFrame implements ActionListener {
             //     showErrorDialog("Error en linea 1, token no reconocido: "+ firstToken);
             // }
 
-            ejemplo_sintactico analizarSintact = new ejemplo_sintactico();
+            ejemplo_sintactico_AST analizarSintact = new ejemplo_sintactico_AST();
             //System.out.println(listaTokens);
             if(!analizarSintact.isValid(listaTokens)){
                 JOptionPane.showMessageDialog(null, analizarSintact.getStateMessage(), "Error", JOptionPane.ERROR_MESSAGE);
