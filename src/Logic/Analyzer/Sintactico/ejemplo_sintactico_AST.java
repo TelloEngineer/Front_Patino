@@ -3,21 +3,13 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 
 import Logic.Analyzer.Lexico.Token.Token;
-import Logic.Analyzer.Semantico.Semantic;
+import lombok.Getter;
 
 public class ejemplo_sintactico_AST {
     private List<Token> tokens;
     private int index;
-    private String stateMessage;
-    private Exp arbol_Sintactico;
-
-    public String getStateMessage() {
-        return this.stateMessage;
-    }
-
-    public Exp getArbol_Sintactico(){
-        return this.arbol_Sintactico;
-    }
+    private @Getter String stateMessage;
+    private @Getter Exp arbol_Sintactico;
 
     private void coincidir(int token) {
         System.out.println("coincidir");
@@ -61,15 +53,15 @@ public class ejemplo_sintactico_AST {
         switch (token.getId().getId()) {
             case 'e': // numero de "entero"
                 coincidir('e'); // numero de "entero"
-                digitoExp = new NumExp("e", token.getLexema().getSubString());
+                digitoExp = new Exp.Num("e", token.getLexema().getSubString());
             break;
             case 'f': //numero de "real"
                 coincidir('f'); // numero de "real"
-                digitoExp = new NumExp("f", token.getLexema().getSubString());
+                digitoExp = new Exp.Num("f", token.getLexema().getSubString());
             break;
             default:
                 coincidir('i'); // numero de "identificador"
-                digitoExp = new NumExp("e", token.getLexema().getSubString());
+                digitoExp = new Exp.Variable("e", token.getLexema().getSubString());
             }
         System.out.println("digito fin");
         return digitoExp;
@@ -83,13 +75,13 @@ public class ejemplo_sintactico_AST {
             case '*': /// cambiar numero "*"
                 this.coincidir('*');
                 factorExp = factor();
-                divMulExp = divMul(new BinaryExp(token.getLexema().getSubString(), divMulHer,factorExp));
+                divMulExp = divMul(new Exp.Binary(token.getLexema().getSubString(), divMulHer,factorExp));
                 resultExp = divMulExp;
             break;
             case '/': /// cambiar numero "/"
                 this.coincidir('/'); 
                 factorExp = factor();
-                divMulExp = divMul(new BinaryExp(token.getLexema().getSubString(), divMulHer,factorExp));
+                divMulExp = divMul(new Exp.Binary(token.getLexema().getSubString(), divMulHer,factorExp));
                 resultExp = divMulExp;
             break;
             default:
@@ -107,13 +99,13 @@ public class ejemplo_sintactico_AST {
             case '+': 
                 this.coincidir('+'); /// poner numero "+"
                 termExp = term();
-                subAddExp = subAdd(new BinaryExp(token.getLexema().getSubString(), subAddHer, termExp));
+                subAddExp = subAdd(new Exp.Binary(token.getLexema().getSubString(), subAddHer, termExp));
                 resultExp = subAddExp;
             break;
             case '-':
                 this.coincidir('-'); /// poner numero "-"
                 termExp = term();
-                subAddExp = subAdd(new BinaryExp(token.getLexema().getSubString(), subAddHer, termExp));
+                subAddExp = subAdd(new Exp.Binary(token.getLexema().getSubString(), subAddHer, termExp));
                 resultExp = subAddExp;
             break;
             default:
@@ -173,7 +165,6 @@ public class ejemplo_sintactico_AST {
             System.out.println("TamaÃ±o de tokens en isValid: " + this.tokens.size());
             this.arbol_Sintactico = expr();
             System.out.println(this.arbol_Sintactico.toString());
-            System.out.println(new Semantic().semanticAnalize(this.arbol_Sintactico)); 
         } catch (CancellationException expected) {
             return false;
         }

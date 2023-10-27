@@ -89,7 +89,7 @@ public class GrammarV1_0 implements Grammar, GetLexycal{
         }
         inString = cutString(this.tokenAnalizer, inString);
         tokenFound = setPosToken(tokenFound, this.tokenAnalizer.getLastPosition());
-        System.out.println(tokenFound);
+        //System.out.println(tokenFound);
         this.tokenAnalizer.setLexycalComponent(tokenFound);
         return false;
         

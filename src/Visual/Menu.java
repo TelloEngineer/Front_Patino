@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Logic.Analyzer.Lexico.GrammarV1_0;
 import Logic.Analyzer.Lexico.Token.Token;
+import Logic.Analyzer.Semantico.Semantic;
 import Logic.Analyzer.Sintactico.Syntatic;
 import Logic.Analyzer.Sintactico.ejemplo_sintactico_AST;
 import Logic.Behavior.Analyzer;
@@ -290,13 +291,14 @@ public class Menu extends JFrame implements ActionListener {
             // }
 
             ejemplo_sintactico_AST analizarSintact = new ejemplo_sintactico_AST();
-            //System.out.println(listaTokens);
             if(!analizarSintact.isValid(listaTokens)){
                 JOptionPane.showMessageDialog(null, analizarSintact.getStateMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             else{
                 JOptionPane.showMessageDialog(null, analizarSintact.getStateMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
+            
+            System.out.println(new Semantic().semanticAnalize(analizarSintact.getArbol_Sintactico()));
         }
     }
 
