@@ -60,6 +60,7 @@ public class Syntatic {
         switch (token.getId().getId()) {
             case 1:
                 coincidir(1);
+                //se define el tipo
                 this.type = token.getLexema().getSubString();
                 lista_variables();
                 coincidir(';');
@@ -67,6 +68,7 @@ public class Syntatic {
                 break;
             case 2:
                 coincidir(2);
+                //se define el tipo
                 this.type = token.getLexema().getSubString();
                 lista_variables();
                 coincidir(';');
@@ -80,10 +82,8 @@ public class Syntatic {
     }
     private void lista_variables(){
         System.out.println("lista_variables");
-
+        //Aqui se declara la variable
         this.Declaraciones.setValue(type, this.tokens.get(index).getLexema().getSubString());
-        System.out.println(this.Declaraciones.getVariable(type, this.tokens.get(index).getLexema().getSubString()));
-
         coincidir('i');
         Token token = this.tokens.get(index);
         switch (token.getId().getId()) {
@@ -130,6 +130,8 @@ public class Syntatic {
  // asignaciones
     private void asignaciones() {
         System.out.println("asignaciones");
+        //Revisa si fue declarada anteriormente, sino, lanza excepcion
+        this.Declaraciones.getVariable(this.tokens.get(index).getLexema().getSubString());
         coincidir('i');
         coincidir('=');
         expresion_arit();
@@ -233,34 +235,48 @@ public class Syntatic {
 //----------------------------------------------------------------------------------------
 // comparacion ---------------------------------------------------------------------------------- 
     private void comparacion(){
-        operador();
-        condicion_op();
-        operador();
+        Exp operador1Exp, operador2Exp, resulExp;
+        String condicion_opExp;
+        System.out.println("comparacion");
+        operador1Exp = operador(); // guarda el operador 1
+        condicion_opExp = condicion_op(); // la operacion
+        operador2Exp = operador(); // operador 2
+        resulExp = new Exp.Binary(condicion_opExp, operador1Exp, operador2Exp); // los guarda como operacion
+        resulExp.semanticAnalize(); // y analiza si son del mismo tipo, de no serlo, saldra una excepcion
+        System.out.println("comparacion fin");
     }
 
-    private void operador(){
+    private Exp operador(){
         System.out.println("operador");
+        Exp resultExp;
         Token token = this.tokens.get(index);
         switch (token.getId().getId()) {
             case 'e': // numero de "entero"
+                resultExp = new Exp.Num("int", token.getLexema().getSubString());
                 coincidir('e'); // numero de "entero"
                 break;
             case 'f': // numero de "real"
+                resultExp = new Exp.Num("float", token.getLexema().getSubString());
                 coincidir('f'); // numero de "real"
                 break;
             case 'i':
+                resultExp = this.Declaraciones.getVariable(token.getLexema().getSubString());
+                System.out.println(resultExp.toString());
                 coincidir('i'); // numero de "identificador"
                 break;
             default:
                 throw new CancellationException("no es un operador valido");
         }
         System.out.println("operador fin");
+        return resultExp;
     }
 
-    private void condicion_op() {
+    private String condicion_op() {
         /// usare if, y mi funcion isThere aqui
         System.out.println("condicion_op");
         Token token = this.tokens.get(index);
+        System.out.println(String.valueOf((char)token.getId().getId()));
+        String condicion_opExp = String.valueOf((char)token.getId().getId());
         switch (token.getId().getId()) {
             case 17: // =
                 coincidir(17); // =
@@ -280,6 +296,8 @@ public class Syntatic {
             default:
                 throw new CancellationException("no es un operador relacional valido");
         }
+        System.out.println("condicion_op fin");
+        return condicion_opExp;
     }
 //------------------------------------------------------------------------------------
 // while ----------------------------------------------------------------------------------

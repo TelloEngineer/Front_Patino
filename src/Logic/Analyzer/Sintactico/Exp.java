@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public interface Exp {
@@ -31,14 +33,38 @@ public interface Exp {
       }
    }
 
-   @Data
    class Variable {
-      public String type;
-      public String name;
+      public @Getter @Setter String type;
+      public @Getter @Setter String name;
 
       public Variable(String t, String n) {
          name = n;
          type = t;
+      }
+
+      @Override
+      public int hashCode() {
+         final int prime = 31;
+         int result = 1;
+         result = prime * result + ((name == null) ? 0 : name.hashCode());
+         return result;
+      }
+
+      @Override
+      public boolean equals(Object obj) {
+         if (this == obj)
+            return true;
+         if (obj == null)
+            return false;
+         if (getClass() != obj.getClass())
+            return false;
+         Variable other = (Variable) obj;
+         if (name == null) {
+            if (other.name != null)
+               return false;
+         } else if (!name.equals(other.name))
+            return false;
+         return true;
       }
    }
 
@@ -75,7 +101,7 @@ public interface Exp {
       public String semanticAnalize() {
          String typeLeft = left.semanticAnalize(), typeRight = right.semanticAnalize();
          if (!typeLeft.equals(typeRight)) {
-            throw new CancellationException("error en la operacion: " + operator);
+            throw new CancellationException("error en la operacion: " + operator + " no coinciden los tipos: " + typeLeft + " con " + typeRight);
          }
          return typeLeft;
       }
@@ -109,12 +135,16 @@ public interface Exp {
         public void setValue(String type, String name) throws CancellationException{
             Exp.Variable newDeclaration = new Exp.Variable(type, name);
             if(this.varDeclarations.contains(newDeclaration)){
-                throw new CancellationException("Se esta volviendo a declarar: " + type + " " + name);
+                throw new CancellationException("Variable duplicada:  " + "'" + name + "'");
             }
             this.varDeclarations.add(newDeclaration);
         }
-        public Exp.ValueOf getVariable(String type, String name){
-            return new Exp.ValueOf(this.varDeclarations.get(this.varDeclarations.indexOf(new Exp.Variable(type, name))));
+        public Exp.ValueOf getVariable(String name){
+            int index = this.varDeclarations.indexOf(new Exp.Variable(" ", name));
+            if(index == -1){
+               throw new CancellationException("Variable aun no declarada:  " + "'" + name + "'");
+            }
+            return new Exp.ValueOf(this.varDeclarations.get(index));
         }
     }
   /*
