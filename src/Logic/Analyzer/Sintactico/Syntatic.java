@@ -8,6 +8,8 @@ public class Syntatic {
     private List<Token> tokens;
     private int index;
     private String stateMessage;
+    private Exp.VarDecl Declaraciones = new Exp.VarDecl();
+    private String type;
 
     public String getStateMessage() {
         return stateMessage;
@@ -18,8 +20,7 @@ public class Syntatic {
         System.out.println("coincidir" + token);
         if((tokens.get(index).getId().getId() != token)){
             System.out.println("error");
-            this.stateMessage = "El numero que se esperaba de token '" + token + "' no el token '" + tokens.get(index).getId().getDescription() + "'";
-            throw new CancellationException();  
+            throw new CancellationException("El numero que se esperaba de token '" + token + "' no el token '" + tokens.get(index).getId().getDescription() + "'");  
         }
         System.out.println("si coincidio: " + tokens.get(index).getLexema().getSubString() + " -- " + index + " de: " + (tokens.size()-1));
         if ((index == tokens.size() - 1 )) {
@@ -59,12 +60,14 @@ public class Syntatic {
         switch (token.getId().getId()) {
             case 1:
                 coincidir(1);
+                this.type = token.getLexema().getSubString();
                 lista_variables();
                 coincidir(';');
                 declaraciones();
                 break;
             case 2:
                 coincidir(2);
+                this.type = token.getLexema().getSubString();
                 lista_variables();
                 coincidir(';');
                 declaraciones();
@@ -77,6 +80,10 @@ public class Syntatic {
     }
     private void lista_variables(){
         System.out.println("lista_variables");
+
+        this.Declaraciones.setValue(type, this.tokens.get(index).getLexema().getSubString());
+        System.out.println(this.Declaraciones.getVariable(type, this.tokens.get(index).getLexema().getSubString()));
+
         coincidir('i');
         Token token = this.tokens.get(index);
         switch (token.getId().getId()) {
@@ -153,8 +160,7 @@ public class Syntatic {
                 exp_arit();
                 break;
             default:
-                this.stateMessage = "no es un operador valido";
-                throw new CancellationException();
+                throw new CancellationException("no es un operador valido");
         }
         System.out.println("expresion_arit fin");
     }
@@ -190,8 +196,7 @@ public class Syntatic {
                 coincidir('/'); // /
                 break;
             default:
-                this.stateMessage = "no es un operador valido";
-                throw new CancellationException();
+                throw new CancellationException("no es un operador valido");
         }
         System.out.println("operador_arit fin");
     }
@@ -221,8 +226,7 @@ public class Syntatic {
                 } 
             break;
             default:
-                this.stateMessage = "no cerro correctamente la condicion";
-                throw new CancellationException();
+                throw new CancellationException("no cerro correctamente la condicion");
         }
         System.out.println("sig_condicion fin");
     }
@@ -248,8 +252,7 @@ public class Syntatic {
                 coincidir('i'); // numero de "identificador"
                 break;
             default:
-                this.stateMessage = "no es un operador valido";
-                throw new CancellationException();
+                throw new CancellationException("no es un operador valido");
         }
         System.out.println("operador fin");
     }
@@ -275,8 +278,7 @@ public class Syntatic {
                 coincidir('>'); // >
                 break;
             default:
-                this.stateMessage = "no es un operador relacional valido";
-                throw new CancellationException();
+                throw new CancellationException("no es un operador relacional valido");
         }
     }
 //------------------------------------------------------------------------------------
@@ -315,20 +317,21 @@ public class Syntatic {
         listaTokens.add(new Token());
         this.tokens = listaTokens;
         this.index = 0;
+        this.Declaraciones.clear();
+        this.type = "";
     
         try {
             if (this.tokens.isEmpty()) {
-                this.stateMessage = "La lista de tokens no se ha inicializado";
-                throw new CancellationException();
+                throw new CancellationException("La lista de tokens no se ha inicializado");
             }
             // Agregar una verificaciÃ³n para imprimir el tamaÃ±o de la lista
             System.out.println("TamaÃ±o de tokens en isValid: " + this.tokens.size());
             programa();
             if ( index < this.tokens.size() - 1){
-                this.stateMessage = "El token '" + tokens.get(index).getLexema().getSubString() + "' no es valido";
-                throw new CancellationException();
+                throw new CancellationException("El token '" + tokens.get(index).getLexema().getSubString() + "' no es valido");
             }
         } catch (CancellationException expected) {
+            this.stateMessage = expected.getMessage();
             return false;
         }
         this.stateMessage = "Todo bien";

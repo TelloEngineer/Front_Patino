@@ -291,15 +291,15 @@ public class Menu extends JFrame implements ActionListener {
             //     showErrorDialog("Error en linea 1, token no reconocido: "+ firstToken);
             // }
 
-            ejemplo_sintactico_AST analizarSintact = new ejemplo_sintactico_AST();
+            Syntatic analizarSintact = new Syntatic();
             if(!analizarSintact.isValid(listaTokens)){
                 JOptionPane.showMessageDialog(null, analizarSintact.getStateMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             else{
                 JOptionPane.showMessageDialog(null, analizarSintact.getStateMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
-            Exp Ast_toAnalize = analizarSintact.getArbol_Sintactico();
-             System.out.println(new Semantic().semanticAnalize(Ast_toAnalize)); 
+            //Exp Ast_toAnalize = analizarSintact.getArbol_Sintactico();
+            //System.out.println(new Semantic().semanticAnalize(Ast_toAnalize)); 
         }
     }
 

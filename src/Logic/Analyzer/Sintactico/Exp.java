@@ -1,10 +1,11 @@
 package Logic.Analyzer.Sintactico;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 
 import lombok.Data;
 
-import java.util.List;
 
 public interface Exp {
    public String toString();
@@ -98,7 +99,25 @@ public interface Exp {
          return operand.semanticAnalize();
       }
    }
+   class VarDecl {
+        private List<Exp.Variable>varDeclarations = new LinkedList<Exp.Variable>();
+        
+        public void clear(){
+            this.varDeclarations.clear();
+        }
 
+        public void setValue(String type, String name) throws CancellationException{
+            Exp.Variable newDeclaration = new Exp.Variable(type, name);
+            if(this.varDeclarations.contains(newDeclaration)){
+                throw new CancellationException("Se esta volviendo a declarar: " + type + " " + name);
+            }
+            this.varDeclarations.add(newDeclaration);
+        }
+        public Exp.ValueOf getVariable(String type, String name){
+            return new Exp.ValueOf(this.varDeclarations.get(this.varDeclarations.indexOf(new Exp.Variable(type, name))));
+        }
+    }
+  /*
    class Call implements Exp {
       public String name;
       public List<Exp> arguments;
@@ -177,4 +196,5 @@ public interface Exp {
          return attribute + " " + value.toString();
       }
    }
+   */
 }
