@@ -9,6 +9,10 @@ public class Semantic {
 
    public boolean semanticAnalize(Exp Ast_toAnalize) {
        try {
+           if(Ast_toAnalize == null) {
+              this.message = "esta vacio el arbol";
+              return false; 
+           }
            System.out.println(Ast_toAnalize.semanticAnalize());
            this.message = "Correcto";
            return true;

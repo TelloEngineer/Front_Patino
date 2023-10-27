@@ -31,7 +31,7 @@ public interface Exp {
    }
 
    @Data
-   class Variable implements Exp {
+   class Variable {
       public String type;
       public String name;
 
@@ -39,13 +39,19 @@ public interface Exp {
          name = n;
          type = t;
       }
+   }
 
+   class ValueOf implements Exp{
+      Variable variable;
+      public ValueOf(Variable variable) {
+         this.variable = variable;
+      }
       public String toString() {
-         return " <" + type + "," + name + "> ";
+         return " <" + variable.getType() + "," + variable.getName() + "> ";
       }
 
       public String semanticAnalize() {
-         return type;
+         return variable.getType();
       }
    }
 

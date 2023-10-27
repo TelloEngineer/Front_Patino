@@ -61,7 +61,7 @@ public class ejemplo_sintactico_AST {
             break;
             default:
                 coincidir('i'); // numero de "identificador"
-                digitoExp = new Exp.Variable("e", token.getLexema().getSubString());
+                digitoExp = new Exp.Num("e", token.getLexema().getSubString());
             }
         System.out.println("digito fin");
         return digitoExp;
