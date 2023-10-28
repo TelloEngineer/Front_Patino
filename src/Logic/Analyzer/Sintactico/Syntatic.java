@@ -129,78 +129,98 @@ public class Syntatic {
     }
  // asignaciones
     private void asignaciones() {
+        Exp variableExp,expresion_aritExp,resultExp;
         System.out.println("asignaciones");
         //Revisa si fue declarada anteriormente, sino, lanza excepcion
-        this.Declaraciones.getVariable(this.tokens.get(index).getLexema().getSubString());
+        variableExp = this.Declaraciones.getVariable(this.tokens.get(index).getLexema().getSubString());
         coincidir('i');
         coincidir('=');
-        expresion_arit();
+        expresion_aritExp = expresion_arit();
         coincidir(';');  
+        resultExp = new Exp.Binary("=", variableExp, expresion_aritExp);
+        resultExp.semanticAnalize();
+        System.out.println(resultExp.toString());
         System.out.println("asignaciones fin");       
     }
     
-    private void expresion_arit() {
+    private Exp expresion_arit() {
+        Exp resultExp, expresion_aritExp, varExp;
         System.out.println("expresion_arit");
         Token token = this.tokens.get(index);
         switch (token.getId().getId()) {
             case '(':
                 coincidir('(');
-                expresion_arit();
+                expresion_aritExp = expresion_arit();
                 coincidir(')');
-                exp_arit();
+                resultExp = exp_arit(expresion_aritExp);
             break;
             case 'e': // numero de "entero"
+                varExp = new Exp.Num("int", token.getLexema().getSubString());
                 coincidir('e'); // numero de "entero"
-                exp_arit();
-                break;
+                resultExp = exp_arit(varExp);
+            break;
             case 'f': // numero de "real"
+                varExp = new Exp.Num("float", token.getLexema().getSubString());
                 coincidir('f'); // numero de "real"
-                exp_arit();
-                break;
+                resultExp = exp_arit(varExp);
+            break;
             case 'i':
+                varExp = this.Declaraciones.getVariable(token.getLexema().getSubString());
                 coincidir('i'); // numero de "identificador"
-                exp_arit();
-                break;
+                resultExp = exp_arit(varExp);
+            break;
             default:
                 throw new CancellationException("no es un operador valido");
         }
+        System.out.println(resultExp.toString());
         System.out.println("expresion_arit fin");
+        return resultExp;
     }
 
-    private void exp_arit(){
+    private Exp exp_arit(Exp exp_aritHer){
+        String operador_aritExp;
+        Exp expresion_aritExp, resultExp;
         System.out.println("exp_arit");
         Token token = this.tokens.get(index);
         switch (token.getId().getId()) {
             case '+':case '-':case '*':case '/': 
-                operador_arit();
-                expresion_arit();
-                exp_arit();
+                operador_aritExp = operador_arit();
+                expresion_aritExp = expresion_arit();
+                resultExp = exp_arit(new Exp.Binary(operador_aritExp, exp_aritHer, expresion_aritExp));
+            break;
             default:
-                break;
+                resultExp = exp_aritHer;
+            break;
         }
+        System.out.println(resultExp.toString());
         System.out.println("exp_arit fin");
+        return resultExp;
     }
 
-    private void operador_arit() {
+    private String operador_arit() {
+        String operador_aritExp;
         System.out.println("operador_arit");
         Token token = this.tokens.get(index);
+        operador_aritExp = token.getLexema().getSubString();
         switch (token.getId().getId()) {
             case '+': // +
                 coincidir('+'); // +
-                break;
+            break;
             case '*': // *
                 coincidir('*'); // *
-                break;
+            break;
             case '-': // -
                 coincidir('-'); // -
-                break;
+            break;
             case '/': // /
                 coincidir('/'); // /
-                break;
+            break;
             default:
                 throw new CancellationException("no es un operador valido");
         }
+        System.out.println(operador_aritExp);
         System.out.println("operador_arit fin");
+        return operador_aritExp;
     }
 //----------------------------------------------------------------------------------
 
