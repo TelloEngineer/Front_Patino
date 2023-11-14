@@ -26,6 +26,7 @@ public class Menu extends JFrame implements ActionListener {
     private JTextArea entradaField;
     private JButton analizarButton;
     private JButton analizarSintacticaButton;
+    private JButton analizarSemanticaButton;
     private JButton traerCodigoFuenteButton;
     private JButton limpiarAnalizadorLexicoButton;
     private JTable tabla;
@@ -64,6 +65,9 @@ public class Menu extends JFrame implements ActionListener {
         limpiarAnalizadorLexicoButton = new JButton("Limpiar");
         limpiarAnalizadorLexicoButton.addActionListener(this);
 
+        analizarSemanticaButton = new JButton("Analizar Semánticamente");
+        analizarSemanticaButton.addActionListener(this);
+
         // Tabla en la esquina inferior izquierda
         tablaModel = new DefaultTableModel();
         tablaModel.addColumn("Lexema");
@@ -74,30 +78,7 @@ public class Menu extends JFrame implements ActionListener {
         tabla.setSelectionBackground(Color.red);
         JScrollPane scrollPaneTabla = new JScrollPane(tabla);
 
-        // constraints.gridx = 0;
-        // constraints.gridy = 0;
-        // constraints.gridwidth = 1;
-        // constraints.gridheight = 1;
-        // panelPrincipal.add(panelCaptura, constraints);
-
-        // constraints.gridx = 1;
-        // constraints.gridy = 0;
-        // constraints.gridwidth = 1;
-        // constraints.gridheight = 1;
-        // constraints.fill = GridBagConstraints.NONE; // Establecer el relleno a NONE
-        // panelPrincipal.add(analizarButton, constraints);
-
-        // constraints.gridx = 2;
-        // constraints.gridy = 0;
-        // constraints.gridwidth = 1;
-        // constraints.gridheight = 1;
-        // constraints.fill = GridBagConstraints.BOTH; // Restaurar el relleno a BOTH
-
-        // constraints.gridx = 0;
-        // constraints.gridy = 1;
-        // constraints.gridwidth = 3;
-        // constraints.gridheight = 1;
-        // panelPrincipal.add(scrollPaneTabla, constraints);
+       
 
         javax.swing.GroupLayout panelPrincipal = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(panelPrincipal);
@@ -131,43 +112,99 @@ public class Menu extends JFrame implements ActionListener {
         //                         .addGap(10, 10, 10)));
 
         //acomodo léxico y sintáctico
-        panelPrincipal.setHorizontalGroup(
-            panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelPrincipal.createSequentialGroup()
-                    .addGap(31, 31, 31)
-                    .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
-                        .addComponent(panelCaptura))
-                    .addGap(18, 37, Short.MAX_VALUE)
-                    .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipal.createSequentialGroup()
-                            .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(analizarSintacticaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(22, 22, 22))
-        );
-        panelPrincipal.setVerticalGroup(
-            panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelPrincipal.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelPrincipal.createSequentialGroup()
-                        .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 500,javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(analizarSintacticaButton,  javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelCaptura, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
+        // panelPrincipal.setHorizontalGroup(
+        //     panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        //         .addGroup(panelPrincipal.createSequentialGroup()
+        //             .addGap(31, 31, 31)
+        //             .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        //                 .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+        //                 .addComponent(panelCaptura))
+        //             .addGap(18, 37, Short.MAX_VALUE)
+        //             .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        //                 .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        //                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipal.createSequentialGroup()
+        //                     .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+        //                     .addGap(18, 18, 18)
+        //                     .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+        //                 .addComponent(analizarSintacticaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        //                 .addGap(22, 22, 22))
+        // );
+        // panelPrincipal.setVerticalGroup(
+        //     panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        //     .addGroup(panelPrincipal.createSequentialGroup()
+        //         .addContainerGap()
+        //         .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        //             .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        //                 .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+        //                 .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+        //             .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        //         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        //         .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        //             .addGroup(panelPrincipal.createSequentialGroup()
+        //                 .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 500,javax.swing.GroupLayout.PREFERRED_SIZE)
+        //                 .addGap(18, 18, 18)
+        //                 .addComponent(analizarSintacticaButton,  javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+        //             .addComponent(panelCaptura, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE))
+        //         .addContainerGap(12, Short.MAX_VALUE))
+        // );
 
         // add(panelPrincipal);
+
+        //sintáctico, léxico y semántico
+        panelPrincipal.setHorizontalGroup(
+            panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipal.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+                        .addComponent(panelCaptura)
+                        .addComponent(analizarSemanticaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE )
+                    .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(analizarSintacticaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipal.createSequentialGroup()
+                                .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            )
+                        )
+                    )
+                .addContainerGap()
+            )
+        );
+
+        panelPrincipal.setVerticalGroup(
+            panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(
+                panelPrincipal.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(
+                    panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(
+                        panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    )
+                    .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                )
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(
+                    panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelCaptura)
+                    .addComponent(scrollPaneTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                )
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(
+                    panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(analizarSintacticaButton,  javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(analizarSemanticaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                )
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            )
+        );
+
         pack();
 
         setVisible(true);
@@ -179,10 +216,13 @@ public class Menu extends JFrame implements ActionListener {
         analyzer = new StringAnalyzer();
         GrammarV1_0 grammar = new GrammarV1_0();
         Grammar grammarToAnalize = grammar;
+        Syntatic analizarSintact = new Syntatic();
+
         String entrada = entradaField.getText();
         analyzer.analyze(entrada, grammarToAnalize);
         String command = e.getActionCommand();
         List<Token> listaTokens = grammar.getLexycal();
+        boolean isSyntaticCorrect = analizarSintact.isValid(listaTokens);
 
         System.out.println(command);
         if(command.equalsIgnoreCase("Limpiar") || command.equalsIgnoreCase("Analizar léxicamente")){
@@ -218,90 +258,25 @@ public class Menu extends JFrame implements ActionListener {
                     }
                 }
         }
-
+                
         if(command.equalsIgnoreCase("Analizar Sintácticamente")){
             System.out.println("clic en analizador sintactico");
-            // int rowCount = tablaModel.getRowCount();
-            // Object firstToken = tablaModel.getValueAt(0, 0);
-            // int contTokens = 1;
-            // System.out.println(firstToken);
-            // Object prevToken = firstToken;
-            // Pattern identiPattern = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*");
-            // if("int".equals(firstToken)){
-            //     for(int row = 1; row < rowCount; row++){
-            //         Object token = tablaModel.getValueAt(row, 0);
-            //         System.out.println(token);
-            //         if("main".equals(token)){
-            //             contTokens += 1;
-            //             prevToken = token;
-            //             token = tablaModel.getValueAt(contTokens, 0);
-            //             if("(".equals(token)){
-            //                 contTokens += 1;
-            //                 prevToken = token;
-            //                 token = tablaModel.getValueAt(contTokens, 0);
-            //                 if(")".equals(token)){
-            //                     contTokens += 1;
-            //                     prevToken = token;
-            //                     token = tablaModel.getValueAt(contTokens, 0);
-            //                     if("{".equals(token)){
-            //                         contTokens += 1;
-            //                         prevToken = token;
-            //                         token = tablaModel.getValueAt(contTokens, 0);
-                                    
-            //                         //empieza el bloque
-            //                         for(int rowB = contTokens; rowB < rowCount; rowB++){
-            //                             //validamos si es identificador
-            //                             String valueToken = token.toString();
-            //                             Matcher identificadorMatcher = identiPattern.matcher(valueToken);
-            //                             if(identificadorMatcher.matches()){
-            //                                 System.out.println("identificador");
-            //                             }
-            //                         }
-            //                         if("}".equals(token)){
-            //                             JOptionPane.showMessageDialog(null, "Analizado sinácticamente", "Éxito", JOptionPane.ERROR_MESSAGE);
-            //                             break;
-            //                         }
-            //                         else{
-            //                             showErrorDialog("Error cerca de: '"+prevToken+"', token no reconocido: "+ token);
-            //                             break;
-            //                         }
-            //                     }
-            //                     else{
-            //                         showErrorDialog("Error cerca de: '"+prevToken+"', token no reconocido: "+ token);
-            //                         break;
-            //                     }
-            //                 }
-            //                 else{
-            //                     showErrorDialog("Error cerca de: '"+prevToken+"', token no reconocido: "+ token);
-            //                     break;
-            //                 }
-            //             }
-            //             else{
-            //                 showErrorDialog("Error cerca de: '"+prevToken+"', token no reconocido: "+ token);
-            //                 break;
-            //             }
-            //         }
-            //         else{
-            //             showErrorDialog("Error cerca de: '"+prevToken+"', token no reconocido: "+ token);
-            //             break;
-            //         }
-            //     }
-            // }
-            // else{
-            //     showErrorDialog("Error en linea 1, token no reconocido: "+ firstToken);
-            // }
-
-            Syntatic analizarSintact = new Syntatic();
-            if(!analizarSintact.isValid(listaTokens)){
+            
+            if(!isSyntaticCorrect){
                 JOptionPane.showMessageDialog(null, analizarSintact.getStateMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
             else{
                 JOptionPane.showMessageDialog(null, analizarSintact.getStateMessage(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
+        }
+
+        if(command.equalsIgnoreCase("Analizar Semánticamente")){
             //Exp Ast_toAnalize = analizarSintact.getArbol_Sintactico();
             //System.out.println(new Semantic().semanticAnalize(Ast_toAnalize)); 
+            System.out.println(analizarSintact.getErrorSemantic().toString());
         }
     }
+
 
     private void deleteColumns(){
         while((tablaModel.getRowCount()>0)){

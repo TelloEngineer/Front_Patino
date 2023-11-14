@@ -1,20 +1,18 @@
 package Logic.Analyzer.Sintactico;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 
 import Logic.Analyzer.Lexico.Token.Token;
+import lombok.Getter;
 
 public class Syntatic {
     private List<Token> tokens;
     private int index;
-    private String stateMessage;
+    private @Getter String stateMessage;
     private Exp.VarDecl Declaraciones = new Exp.VarDecl();
     private String type;
-
-    public String getStateMessage() {
-        return stateMessage;
-    }
-
+    private @Getter List<String> errorSemantic = new LinkedList<String>();
 
     private void coincidir(int token) {
         System.out.println("coincidir" + token);
@@ -61,7 +59,7 @@ public class Syntatic {
             case 1:
                 coincidir(1);
                 //se define el tipo
-                this.type = token.getLexema().getSubString();
+                this.type = token.getLexema().getSubString(); //int
                 lista_variables();
                 coincidir(';');
                 declaraciones();
@@ -69,7 +67,7 @@ public class Syntatic {
             case 2:
                 coincidir(2);
                 //se define el tipo
-                this.type = token.getLexema().getSubString();
+                this.type = token.getLexema().getSubString(); //float
                 lista_variables();
                 coincidir(';');
                 declaraciones();
@@ -132,13 +130,22 @@ public class Syntatic {
         Exp variableExp,expresion_aritExp,resultExp;
         System.out.println("asignaciones");
         //Revisa si fue declarada anteriormente, sino, lanza excepcion
+        try {
+            this.Declaraciones.getVariable(this.tokens.get(index).getLexema().getSubString());
+        } catch (CancellationException expected) {
+            errorSemantic.add("error in token: " + this.index + " " + expected.getMessage());   
+        }
         variableExp = this.Declaraciones.getVariable(this.tokens.get(index).getLexema().getSubString());
         coincidir('i');
         coincidir('=');
         expresion_aritExp = expresion_arit();
         coincidir(';');  
         resultExp = new Exp.Binary("=", variableExp, expresion_aritExp);
-        resultExp.semanticAnalize();
+         try {
+            resultExp.semanticAnalize();
+        } catch (CancellationException expected) {
+            errorSemantic.add("error in token: " + this.index + " " + expected.getMessage());   
+        }
         System.out.println(resultExp.toString());
         System.out.println("asignaciones fin");       
     }
@@ -165,6 +172,11 @@ public class Syntatic {
                 resultExp = exp_arit(varExp);
             break;
             case 'i':
+                try {
+                    this.Declaraciones.getVariable(token.getLexema().getSubString());
+                } catch (CancellationException expected) {
+                    errorSemantic.add("error in token: " + this.index + " " + expected.getMessage());   
+                }
                 varExp = this.Declaraciones.getVariable(token.getLexema().getSubString());
                 coincidir('i'); // numero de "identificador"
                 resultExp = exp_arit(varExp);
@@ -262,7 +274,11 @@ public class Syntatic {
         condicion_opExp = condicion_op(); // la operacion
         operador2Exp = operador(); // operador 2
         resulExp = new Exp.Binary(condicion_opExp, operador1Exp, operador2Exp); // los guarda como operacion
-        resulExp.semanticAnalize(); // y analiza si son del mismo tipo, de no serlo, saldra una excepcion
+        try {
+            resulExp.semanticAnalize(); // y analiza si son del mismo tipo, de no serlo, saldra una excepcion
+        } catch (CancellationException expected) {
+            errorSemantic.add("error in token: " + this.index + " " + expected.getMessage());   
+        }
         System.out.println("comparacion fin");
     }
 
@@ -280,6 +296,11 @@ public class Syntatic {
                 coincidir('f'); // numero de "real"
                 break;
             case 'i':
+                try {
+                    this.Declaraciones.getVariable(token.getLexema().getSubString());
+                } catch (CancellationException expected) {
+                    errorSemantic.add("error in token: " + this.index + " " + expected.getMessage());   
+                }
                 resultExp = this.Declaraciones.getVariable(token.getLexema().getSubString());
                 System.out.println(resultExp.toString());
                 coincidir('i'); // numero de "identificador"
@@ -356,6 +377,7 @@ public class Syntatic {
         this.tokens = listaTokens;
         this.index = 0;
         this.Declaraciones.clear();
+        this.errorSemantic.clear();
         this.type = "";
     
         try {
@@ -375,4 +397,4 @@ public class Syntatic {
         this.stateMessage = "Todo bien";
         return true;
     }
-}
+}       
