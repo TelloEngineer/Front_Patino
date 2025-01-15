@@ -7,6 +7,12 @@ Syntantic and semantic elements of the text. it was made to
 check a no complex grammar.
 it does his job fast, it show my knowledge of the java
 language
+## Quick Start:
+it is a app.jar ready to run. you just need a java version 17 or forward.
+
+"indentificadores.pdf" show you how recognize the token, you can understand the numbers o symbols.
+"cf.txt" it is basic example, syntactic is correct, but semantic not, it show how to solve it.
+float type needs to be with a float point. program just accept int and float type.
 ## Getting Start
 Folder Structure
 The workspace contains two folders by default, where:
@@ -17,5 +23,4 @@ Meanwhile, the compiled output files will be generated in the bin folder by defa
 
 If you want to customize the folder structure, open .vscode/settings.json and update the related settings there.
 
-## Quick Start:
-it is a app.jar ready to run. you just need a java version 17 or forward.
+

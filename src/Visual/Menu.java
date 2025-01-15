@@ -6,10 +6,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Logic.Analyzer.Lexico.GrammarV1_0;
 import Logic.Analyzer.Lexico.Token.Token;
-import Logic.Analyzer.Semantico.Semantic;
-import Logic.Analyzer.Sintactico.Exp;
 import Logic.Analyzer.Sintactico.Syntatic;
-import Logic.Analyzer.Sintactico.ejemplo_sintactico_AST;
 import Logic.Behavior.Analyzer;
 import Logic.Behavior.Grammar;
 import Logic.Formats.StringAnalyzer;
@@ -31,6 +28,10 @@ public class Menu extends JFrame implements ActionListener {
     private JButton limpiarAnalizadorLexicoButton;
     private JTable tabla;
     private DefaultTableModel tablaModel;
+
+    private JTable tabla2;
+    private DefaultTableModel tablaModel2;
+    private JFrame frameSemantico; 
 
     public Menu() {
         setTitle("Analizador Léxico y Sintáctico");
@@ -78,77 +79,33 @@ public class Menu extends JFrame implements ActionListener {
         tabla.setSelectionBackground(Color.red);
         JScrollPane scrollPaneTabla = new JScrollPane(tabla);
 
-       
+        //-----------------------------------------------------------
+
+        tablaModel2 = new DefaultTableModel();
+        tablaModel2.addColumn("Resultados");
+        tabla2 = new JTable(tablaModel2);
+        tabla2.getTableHeader().setBackground(new Color(168, 169, 240));
+        tabla2.setSelectionBackground(Color.red);
+        //JScrollPane scrollPaneTabla = new JScrollPane(tabla);
+
+
+        //resultadoSemanticoArea.setEditable(false); // Para que el usuario no pueda editar el resultado
+        frameSemantico = new JFrame("Resultado Semántico");
+        frameSemantico.setSize(400, 300);
+        frameSemantico.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cierra solo la nueva pestaña al cerrarla
+
+        JPanel panelSemantico = new JPanel(new BorderLayout());
+        JScrollPane scrollPaneSemantico = new JScrollPane(tabla2);
+        panelSemantico.add(scrollPaneSemantico, BorderLayout.CENTER);
+
+        frameSemantico.add(panelSemantico);
+        frameSemantico.setVisible(false);  // Inicialmente ocultar la nueva pestaña
+
+
+        //-----------------------------------------------------------
 
         javax.swing.GroupLayout panelPrincipal = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(panelPrincipal);
-
-        //acomodo lexico
-        // colocamos en dos bloques en horizontal y en vertical los componenetes
-        // agregando los espacios para que estén donde queramos
-        // panelPrincipal.setHorizontalGroup(
-        //         panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //                 .addGroup(panelPrincipal.createSequentialGroup()
-        //                         .addGap(136, 136, 136)
-        //                         .addComponent(analizarButton)
-        //                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        //                 .addGroup(panelPrincipal.createSequentialGroup()
-        //                         .addGap(35, 35, 35)
-        //                         .addComponent(panelCaptura, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
-        //                         .addGap(18, 18, 18)
-        //                         .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 384,
-        //                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-        //                         .addGap(29, 29, 29)));
-        // panelPrincipal.setVerticalGroup(
-        //         panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //                 .addGroup(panelPrincipal.createSequentialGroup()
-        //                         .addGap(17, 17, 17)
-        //                         .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //                                 .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 338,
-        //                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-        //                                 .addComponent(panelCaptura))
-        //                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        //                         .addComponent(analizarButton)
-        //                         .addGap(10, 10, 10)));
-
-        //acomodo léxico y sintáctico
-        // panelPrincipal.setHorizontalGroup(
-        //     panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //         .addGroup(panelPrincipal.createSequentialGroup()
-        //             .addGap(31, 31, 31)
-        //             .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-        //                 .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
-        //                 .addComponent(panelCaptura))
-        //             .addGap(18, 37, Short.MAX_VALUE)
-        //             .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-        //                 .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-        //                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPrincipal.createSequentialGroup()
-        //                     .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-        //                     .addGap(18, 18, 18)
-        //                     .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-        //                 .addComponent(analizarSintacticaButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        //                 .addGap(22, 22, 22))
-        // );
-        // panelPrincipal.setVerticalGroup(
-        //     panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //     .addGroup(panelPrincipal.createSequentialGroup()
-        //         .addContainerGap()
-        //         .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-        //             .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-        //                 .addComponent(traerCodigoFuenteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-        //                 .addComponent(analizarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-        //             .addComponent(limpiarAnalizadorLexicoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        //         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        //         .addGroup(panelPrincipal.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        //             .addGroup(panelPrincipal.createSequentialGroup()
-        //                 .addComponent(scrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 500,javax.swing.GroupLayout.PREFERRED_SIZE)
-        //                 .addGap(18, 18, 18)
-        //                 .addComponent(analizarSintacticaButton,  javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-        //             .addComponent(panelCaptura, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE))
-        //         .addContainerGap(12, Short.MAX_VALUE))
-        // );
-
-        // add(panelPrincipal);
 
         //sintáctico, léxico y semántico
         panelPrincipal.setHorizontalGroup(
@@ -271,9 +228,19 @@ public class Menu extends JFrame implements ActionListener {
         }
 
         if(command.equalsIgnoreCase("Analizar Semánticamente")){
-            //Exp Ast_toAnalize = analizarSintact.getArbol_Sintactico();
-            //System.out.println(new Semantic().semanticAnalize(Ast_toAnalize)); 
-            System.out.println(analizarSintact.getErrorSemantic().toString());
+            frameSemantico.setVisible(false);
+            while((tablaModel2.getRowCount()>0)){
+                tablaModel2.removeRow(tablaModel2.getRowCount()-1);
+            }
+            if(!analizarSintact.getErrorSemantic().isEmpty()){
+                for (String elemento : analizarSintact.getErrorSemantic()) {
+                    tablaModel2.addRow(new Object[] {elemento});
+                }
+            }else{
+                tablaModel2.addRow(new Object[] {"No hubo errores semanticos"});
+            }
+            frameSemantico.setVisible(true);
+
         }
     }
 
